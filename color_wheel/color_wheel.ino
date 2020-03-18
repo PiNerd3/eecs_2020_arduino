@@ -8,6 +8,18 @@
  *  2020-03-18
  */
 
+/** Color wheel programming resources:
+ *  - GSearch "how to calculate color wheel"
+ *  - https://stackoverflow.com/questions/4235072/what-is-the-math-behind-the-colour-wheel
+ *    - suggests color(r, theta) = hsv(theta, r, 1)
+ *    - someone links https://www.easyrgb.com/en/ ... ?
+ *  - https://stackoverflow.com/questions/180/function-for-creating-color-wheels - I think this is a slightly different question and so not useful
+ *  - Python color library https://docs.python.org/3/library/colorsys.html and it's implementation https://github.com/python/cpython/blob/3.8/Lib/colorsys.py
+ *  - Of dubious use:
+ *    - https://poynton.ca/ColorFAQ.html
+ *    - https://www.cambridgeincolour.com/tutorials/color-spaces.htm
+ */
+
 #define DEBUG false
 
 const int RED = 3;
@@ -49,11 +61,11 @@ void loop() {
   const double x = analogRead(X_AXIS_);
   const double y = analogRead(Y_AXIS_);
 
-#ifdef DEBUG
-  Serial.print("x: "); Serial.print(x, 4); Serial.print("\n");
-  Serial.print("y: "); Serial.print(y, 4); Serial.print("\n\n");
-  delay(100);
-#endif
+  #ifdef DEBUG
+    Serial.print("x: "); Serial.print(x, 4); Serial.print("\n");
+    Serial.print("y: "); Serial.print(y, 4); Serial.print("\n\n");
+    delay(100);
+  #endif
 
   const double r = sqrt(pow(x, 2) + pow(y, 2));
   const double theta = atan2(y, x); // -pi to pi: https://www.nongnu.org/avr-libc/user-manual/group__avr__math.html#ga054230cd7e4c12958dbfac75ab6886e5
