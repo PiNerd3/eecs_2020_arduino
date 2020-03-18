@@ -7,7 +7,9 @@
  *  by Nathaniel Hamovitz
  *  2020-03-18
  */
- 
+
+#define DEBUG false
+
 const int RED = 3;
 const int GREEN = 9;
 const int BLUE = 10;
@@ -16,12 +18,6 @@ const int Y_AXIS_ = 5; // Pin A5. On board as `VY`. `Y_AXIS` is a reserved token
 const int X_AXIS_ = 3; // Pin A3. On board as `VX`. `X_AXIS` is a reserved token.
 const int SWITCH = 2; // Pin 2. On board as `SW`.
 
-bool pressed;
-int green_val;
-int blue_val;
-
-// If analogWrite didn't work, would have used this to scale the pot value [0-1023] to a millisecond value [0-1000]
-// const double TIMING_SCALAR = 1000 / 1023;
 
 inline double adjustRed(double green, double blue) {
   const double BRIGHTNESS_SCALAR = 255 / sqrt(pow(255, 2) + pow(255, 2));
@@ -36,8 +32,6 @@ inline double adjustRed(double green, double blue) {
   return dimmer_red;
 }
 
-
-
 void setup() {
   // initialize LED pins as outputs
   pinMode(RED  , OUTPUT);
@@ -45,20 +39,31 @@ void setup() {
   pinMode(BLUE , OUTPUT);
 
   pinMode(SWITCH, INPUT_PULLUP);
-  // digitalWrite(SWITCH, HIGH); // connect to Vcc via internal pullup resistor, evidently. Not necessary bc `INPUT_PULLUP` exists and is much more explicit. Hooray!
+
+  Serial.begin(9600); while (!Serial) {;};
+
 }
 
 void loop() {
-  pressed = digitalRead(SWITCH) == HIGH ? false : true;
-  green_val = analogRead(X_AXIS_) / 4;
-  blue_val = analogRead(Y_AXIS_) / 4;
+  const bool pressed = digitalRead(SWITCH) == HIGH ? false : true;
+  const double x = analogRead(X_AXIS_);
+  const double y = analogRead(Y_AXIS_);
+
+#ifdef DEBUG
+  Serial.print("x: "); Serial.print(x, 4); Serial.print("\n");
+  Serial.print("y: "); Serial.print(y, 4); Serial.print("\n\n");
+  delay(100);
+#endif
+
+  const double r = sqrt(pow(x, 2) + pow(y, 2));
+  const double theta = atan2(y, x); // -pi to pi: https://www.nongnu.org/avr-libc/user-manual/group__avr__math.html#ga054230cd7e4c12958dbfac75ab6886e5
 
   if (pressed) {
-    analogWrite(RED, adjustRed(green_val, blue_val));
+    analogWrite(RED, adjustRed(x, y));
   } else {
     digitalWrite(RED, LOW);
   }
 
-  analogWrite(GREEN, green_val);
-  analogWrite(BLUE, blue_val);
+//  analogWrite(GREEN, green_val);
+//  analogWrite(BLUE, blue_val);
 }
