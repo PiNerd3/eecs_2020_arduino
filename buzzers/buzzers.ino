@@ -100,6 +100,12 @@
 #endif
 
 const int ACTIVE_BUZZER = 5;
+const int PASSIVE_BUZZER = 6;
+
+// notes in the melody:
+int melody[] = {
+  NOTE_C5, NOTE_D5, NOTE_E5, NOTE_F5, NOTE_G5, NOTE_A5, NOTE_B5, NOTE_C6};
+int duration = 500; // miliseconds
 
 #ifdef DO_ACTIVE
 void run_active_code() {
@@ -107,17 +113,17 @@ void run_active_code() {
   while(1) {
     //output a frequency
     for(i = 0; i < 80; i++) {
-      digitalWrite(buzzer,HIGH);
+      digitalWrite(ACTIVE_BUZZER, HIGH);
       delay(1);
-      digitalWrite(buzzer,LOW);
+      digitalWrite(ACTIVE_BUZZER, LOW);
       delay(1);
     }
  
     //output another frequency
     for(i = 0; i < 100; i++) {
-      digitalWrite(buzzer, HIGH);
+      digitalWrite(ACTIVE_BUZZER, HIGH);
       delay(2);
-      digitalWrite(buzzer, LOW);
+      digitalWrite(ACTIVE_BUZZER, LOW);
       delay(2);
     }
   }
@@ -126,7 +132,16 @@ void run_active_code() {
 
 #ifdef DO_PASSIVE
 void run_passive_code() {
-  // []
+  for (int thisNote = 0; thisNote < 8; thisNote++) {
+    // pin8 output the voice, every scale is 0.5 sencond
+    tone(PASSIVE_BUZZER, melody[thisNote], duration);
+     
+    // Output the voice after several minutes
+    delay(1000);
+  }
+   
+  // restart after two seconds 
+  delay(2000);
 }
 #endif
 
@@ -136,7 +151,7 @@ void setup() {
   #endif
 
   #ifdef DO_PASSIVE
-    // []
+    // nothing
   #endif
 }
 

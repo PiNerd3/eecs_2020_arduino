@@ -12,8 +12,8 @@ const int RED = 3;
 const int GREEN = 9;
 const int BLUE = 10;
 
-const int Y_AXIS_ = 5; // Pin A5. On board as `VY`. `Y_AXIS` is a reserved token.
-const int X_AXIS_ = 3; // Pin A3. On board as `VX`. `X_AXIS` is a reserved token.
+const int Y_AXIS_ = 3; // Pin A5. On board as `VY`. `Y_AXIS` is a reserved token.
+const int X_AXIS_ = 5; // Pin A3. On board as `VX`. `X_AXIS` is a reserved token.
 const int SWITCH = 2; // Pin 2. On board as `SW`.
 
 bool pressed;
