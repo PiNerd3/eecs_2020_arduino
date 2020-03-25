@@ -1,7 +1,7 @@
 #define DO_ACTIVE true
 #define DO_PASSIVE true
 
-#ifdef DO_PASSIVE
+#if DO_PASSIVE 
   // Then #include "pitches.h"
 
   /*************************************************
@@ -103,14 +103,13 @@ const int ACTIVE_BUZZER = 5;
 const int PASSIVE_BUZZER = 6;
 
 // notes in the melody:
-int melody[] = {
-  NOTE_C5, NOTE_D5, NOTE_E5, NOTE_F5, NOTE_G5, NOTE_A5, NOTE_B5, NOTE_C6};
+int melody[] = {NOTE_C5, NOTE_D5, NOTE_E5, NOTE_F5, NOTE_G5, NOTE_A5, NOTE_B5, NOTE_C6};
 int duration = 500; // miliseconds
 
-#ifdef DO_ACTIVE
+#if DO_ACTIVE
 void run_active_code() {
   unsigned char i;
-  while(1) {
+  for (int _ = 0; _ < 25; _++) {
     //output a frequency
     for(i = 0; i < 80; i++) {
       digitalWrite(ACTIVE_BUZZER, HIGH);
@@ -130,10 +129,10 @@ void run_active_code() {
 }
 #endif
 
-#ifdef DO_PASSIVE
+#if DO_PASSIVE
 void run_passive_code() {
   for (int thisNote = 0; thisNote < 8; thisNote++) {
-    // pin8 output the voice, every scale is 0.5 sencond
+    // pin8 output the voice, every scale is 0.5 second
     tone(PASSIVE_BUZZER, melody[thisNote], duration);
      
     // Output the voice after several minutes
@@ -146,21 +145,21 @@ void run_passive_code() {
 #endif
 
 void setup() {
-  #ifdef DO_ACTIVE
+  #if DO_ACTIVE
     pinMode(ACTIVE_BUZZER, OUTPUT);
   #endif
 
-  #ifdef DO_PASSIVE
+  #if DO_PASSIVE
     // nothing
   #endif
 }
 
 void loop() {
-  #ifdef DO_ACTIVE
+  #if DO_ACTIVE
     run_active_code();
   #endif
 
-  #ifdef DO_PASSIVE
+  #if DO_PASSIVE
     run_passive_code();
   #endif
 }
