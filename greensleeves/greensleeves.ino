@@ -99,12 +99,17 @@
 const int PASSIVE_BUZZER = 5;
 const int BPM_POT = A0; // A0
 
-const double BPM = 160.0;
-const int MILLISECONDS_PER_SIXTEENTH = (int)((60.0 * 1000.0) / (BPM * 2.0));
+const int BPM = 160;
 
-int getMillisecondsPerSixteenth(int baseBPM = 140, int topBPM = 180) {
-  int BPM_val = analogRead(BPM_POT);
-  return (int)((BPM_val - 0) / (1023 - 0) * (topBPM - baseBPM) + baseBPM);
+int millisecondsPerSixteenthAtBPM(int BPM) {
+  return (int)((60.0 * 1000.0) / (BPM * 2.0));
+}
+
+const int MILLISECONDS_PER_SIXTEENTH = millisecondsPerSixteenth(BPM);
+
+int calculateMillisecondsPerSixteenth(int baseBPM = 140, int topBPM = 180) {
+  int BPM_val = analogRead(BPM_POT) / 1023) * (topBPM - baseBPM) + baseBPM;
+  return millisecondsPerSixteenthAtBPM(BPM_val);
 };
 
 struct Note {
