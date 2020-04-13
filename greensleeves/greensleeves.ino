@@ -103,19 +103,19 @@ const int BPM = 160;
 
 int millisecondsPerSixteenthAtBPM(int BPM) {
   return (int)((60.0 * 1000.0) / (BPM * 2.0));
-}
+};
 
-const int MILLISECONDS_PER_SIXTEENTH = millisecondsPerSixteenth(BPM);
+const int MILLISECONDS_PER_SIXTEENTH = millisecondsPerSixteenthAtBPM(BPM);
 
-int calculateMillisecondsPerSixteenth(int baseBPM = 140, int topBPM = 180) {
-  int BPM_val = analogRead(BPM_POT) / 1023) * (topBPM - baseBPM) + baseBPM;
+int calculateMillisecondsPerSixteenthFromPot(int baseBPM = 140, int topBPM = 180) {
+  int BPM_val = (analogRead(BPM_POT) / 1023) * (topBPM - baseBPM) + baseBPM;
   return millisecondsPerSixteenthAtBPM(BPM_val);
 };
 
 struct Note {
   int pitch;
-  int sixteenth_duration;
-  int millis_duration;
+  int duration_sixteenths;
+  int duration_millis;
   bool is_rest;
 
   int note_number;
@@ -130,43 +130,45 @@ struct Note {
       this->pitch = pitch;
     }
     
-    this->sixteenth_duration = duration;
-    this->millis_duration = duration * MILLISECONDS_PER_SIXTEENTH;
+    this->duration_sixteenths = duration;
+    this->duration_millis = duration * MILLISECONDS_PER_SIXTEENTH;
 
     this->note_number = this->note_count++;
   }
 
-  void play() {
-    int millis_to_play = this->sixteenth_duration * getMillisecondsPerSixteenth();
+  void play(bool variable_speed = true) {
+    int millis_to_play;
+    if (variable_speed) {
+      millis_to_play = this->duration_sixteenths * calculateMillisecondsPerSixteenthFromPot();
+    } else {
+      millis_to_play = this->duration_millis;
+    }
     
-//    if (!this->is_rest) {
-//      tone(PASSIVE_BUZZER, this->pitch, this->millis_duration);
-//      delay(this->millis_duration + 5);
-//    } else {
-//      delay(this->millis_duration);
-//    }
-
     if (!this->is_rest) {
       tone(PASSIVE_BUZZER, this->pitch, millis_to_play);
-      delay(millis_to_play + 5);
-    } else {
-      delay(millis_to_play);
     }
-
+    
+    delay(millis_to_play + 5);
   }
 };
 
 int Note::note_count = 0;
 
-//Note* make_note(int pitch, int duration) {
-//  Note* ret = new Note(pitch, duration);
-//  ret->pitch = pitch;
-//  ret->sixteenth_duration = duration;
-//  return ret;
-//};
+/** `make_note` helper function.
+ *  Doesn't work, for some reason.
+ *  Compiler doesn't recognize type here even though it does in, say, the declaration of GREENSLEEVES.
+
+Note* make_note(int pitch, int duration) {
+  Note* ret = new Note(pitch, duration);
+  ret->pitch = pitch;
+  ret->sixteenth_duration = duration;
+  return ret;
+};
+
+*/
 
 // Notes in the melody.
-Note greensleeves[] = {
+const Note GREENSLEEVES[] = {
   Note(NOTE_R5, 10),
   Note(NOTE_E5, 2),
   Note(NOTE_G5, 4),
@@ -244,7 +246,7 @@ Note greensleeves[] = {
   Note(NOTE_R5, 2)
 };
 
-const int GREENSLEEVES_LENGTH = sizeof(greensleeves) / sizeof(Note);
+const int GREENSLEEVES_LENGTH = sizeof(GREENSLEEVES) / sizeof(Note);
 
 void setup() {
 //  pinMode(ACTIVE_BUZZER, OUTPUT);
@@ -262,14 +264,10 @@ void loop() {
   for (int i = 0; i < GREENSLEEVES_LENGTH; i++) {
     Serial.println("starting note");
     
-    greensleeves[i].play();
+    GREENSLEEVES[i].play();
 //    Serial.println(greensleeves[i].note_number);
 //    Serial.println(greensleeves[i].sixteenth_duration);
 //    Serial.println(greensleeves[i].millis_duration);
-
-//    delay(200);
   }
    
-  // restart after two seconds 
-//  delay(5000);
 }
