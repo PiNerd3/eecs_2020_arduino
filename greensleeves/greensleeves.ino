@@ -107,9 +107,12 @@ int millisecondsPerSixteenthAtBPM(int BPM) {
 
 const int MILLISECONDS_PER_SIXTEENTH = millisecondsPerSixteenthAtBPM(BPM);
 
-int calculateMillisecondsPerSixteenthFromPot(int baseBPM = 140, int topBPM = 180) {
-  int BPM_val = (analogRead(BPM_POT) / 1023) * (topBPM - baseBPM) + baseBPM;
-  return millisecondsPerSixteenthAtBPM(BPM_val);
+int calculateMillisecondsPerSixteenthFromPot(int baseBPM = 130, int topBPM = 300) {
+  int pot_val = analogRead(BPM_POT);
+  double BPM_val = (pot_val / 1023.0) * (topBPM - baseBPM) + baseBPM;
+  Serial.println(pot_val);
+  Serial.println(BPM_val);
+  return millisecondsPerSixteenthAtBPM((int)BPM_val);
 };
 
 struct Note {
@@ -168,7 +171,7 @@ Note* make_note(int pitch, int duration) {
 */
 
 // Notes in the melody.
-const Note GREENSLEEVES[] = {
+Note GREENSLEEVES[] = {
   Note(NOTE_R5, 10),
   Note(NOTE_E5, 2),
   Note(NOTE_G5, 4),
@@ -249,8 +252,6 @@ const Note GREENSLEEVES[] = {
 const int GREENSLEEVES_LENGTH = sizeof(GREENSLEEVES) / sizeof(Note);
 
 void setup() {
-//  pinMode(ACTIVE_BUZZER, OUTPUT);
-
   pinMode(BPM_POT, INPUT);
   
   Serial.begin(9600);
