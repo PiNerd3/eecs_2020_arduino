@@ -120,7 +120,8 @@ const int MILLISECONDS_PER_SIXTEENTH = millisecondsPerSixteenthAtBPM(DEFAULT_BPM
 
 int calculateMillisecondsPerSixteenthFromPot(int baseBPM = LOWEST_VARIABLE_BPM, int topBPM = HIGHEST_VARIABLE_BPM) {
   const int pot_val = analogRead(BPM_POT);
-  const double BPM_val = (pot_val / 1023.0) * (topBPM - baseBPM) + baseBPM;
+//  const double BPM_val = (pot_val / 1023.0) * (topBPM - baseBPM) + baseBPM;
+  const double BPM_val = map(pot_val, 0, 1023, baseBPM, topBPM);
   if (DEBUG) {
     Serial.println(pot_val);
     Serial.println(BPM_val);
