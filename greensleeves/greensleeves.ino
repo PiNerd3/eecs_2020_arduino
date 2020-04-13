@@ -1,9 +1,4 @@
-// #include "pitches.h"
-
-/*************************************************
- * Public Constants
- *************************************************/
-
+// include "pitches.h":
 #define NOTE_B0  31
 #define NOTE_C1  33
 #define NOTE_CS1 35
@@ -94,31 +89,51 @@
 #define NOTE_D8  4699
 #define NOTE_DS8 4978
 
-#define NOTE_R5 5000
+#define NOTE_R 5000 // Representing a rest. Just something unreachable.
 
+
+// Settings.
+
+const bool DEBUG = false;
+
+//  Pin assignments
 const int PASSIVE_BUZZER = 5;
-const int BPM_POT = A0; // A0
+const int BPM_POT = A0;
 
-const int BPM = 160;
+//  BPM
+const int DEFAULT_BPM = 160;
+
+const bool VARIABLE_BPM = false;
+const int LOWEST_VARIABLE_BPM = 130;
+const int HIGHEST_VARIABLE_BPM = 300;
+
+const int INTER_NOTE_DELAY = 10; // Mimic the action of a real musician with a minute period of silence between notes.
+
+
+// Utility and setup.
 
 int millisecondsPerSixteenthAtBPM(int BPM) {
   return (int)((60.0 * 1000.0) / (BPM * 2.0));
 };
 
-const int MILLISECONDS_PER_SIXTEENTH = millisecondsPerSixteenthAtBPM(BPM);
+const int MILLISECONDS_PER_SIXTEENTH = millisecondsPerSixteenthAtBPM(DEFAULT_BPM);
 
-int calculateMillisecondsPerSixteenthFromPot(int baseBPM = 130, int topBPM = 300) {
-  int pot_val = analogRead(BPM_POT);
-  double BPM_val = (pot_val / 1023.0) * (topBPM - baseBPM) + baseBPM;
-  Serial.println(pot_val);
-  Serial.println(BPM_val);
+int calculateMillisecondsPerSixteenthFromPot(int baseBPM = LOWEST_VARIABLE_BPM, int topBPM = HIGHEST_VARIABLE_BPM) {
+  const int pot_val = analogRead(BPM_POT);
+  const double BPM_val = (pot_val / 1023.0) * (topBPM - baseBPM) + baseBPM;
+  if (DEBUG) {
+    Serial.println(pot_val);
+    Serial.println(BPM_val);
+  }
   return millisecondsPerSixteenthAtBPM((int)BPM_val);
 };
 
+// Note object.
+
 struct Note {
   int pitch;
-  int duration_sixteenths;
-  int duration_millis;
+  int duration_sixteenths; // Length in sixteenths
+  int duration_millis; // Length in milliseconds, at default BPM. Calculated.
   bool is_rest;
 
   int note_number;
@@ -126,7 +141,7 @@ struct Note {
   static int note_count;
   
   Note(int pitch, int duration) {
-    if (pitch == NOTE_R5) {
+    if (pitch == NOTE_R) {
       this->is_rest = true;
     } else {
       this->is_rest = false;
@@ -136,10 +151,10 @@ struct Note {
     this->duration_sixteenths = duration;
     this->duration_millis = duration * MILLISECONDS_PER_SIXTEENTH;
 
-    this->note_number = this->note_count++;
+    this->note_number = this->note_count++; // Keep track of location in the melody.
   }
 
-  void play(bool variable_speed = true) {
+  void play(bool variable_speed = VARIABLE_BPM) {
     int millis_to_play;
     if (variable_speed) {
       millis_to_play = this->duration_sixteenths * calculateMillisecondsPerSixteenthFromPot();
@@ -151,11 +166,11 @@ struct Note {
       tone(PASSIVE_BUZZER, this->pitch, millis_to_play);
     }
     
-    delay(millis_to_play + 5);
+    delay(millis_to_play + INTER_NOTE_DELAY);
   }
 };
 
-int Note::note_count = 0;
+int Note::note_count = 0; // Needs to be initialized here.
 
 /** `make_note` helper function.
  *  Doesn't work, for some reason.
@@ -170,9 +185,8 @@ Note* make_note(int pitch, int duration) {
 
 */
 
-// Notes in the melody.
 Note GREENSLEEVES[] = {
-  Note(NOTE_R5, 10),
+  Note(NOTE_R, 10),
   Note(NOTE_E5, 2),
   Note(NOTE_G5, 4),
   Note(NOTE_A5, 2),
@@ -211,7 +225,7 @@ Note GREENSLEEVES[] = {
   Note(NOTE_DS5, 2),
   Note(NOTE_E5, 6),
   Note(NOTE_E5, 4),
-  Note(NOTE_R5, 2),
+  Note(NOTE_R, 2),
   Note(NOTE_D6, 6),
   Note(NOTE_D6, 3),
   Note(NOTE_CS6, 1),
@@ -246,29 +260,39 @@ Note GREENSLEEVES[] = {
   Note(NOTE_DS5, 2),
   Note(NOTE_E5, 6),
   Note(NOTE_E5, 4),
-  Note(NOTE_R5, 2)
+  Note(NOTE_R, 2)
 };
 
 const int GREENSLEEVES_LENGTH = sizeof(GREENSLEEVES) / sizeof(Note);
 
+void play_greensleeves() {
+  for (int i = 0; i < GREENSLEEVES_LENGTH; i++) {
+    if (DEBUG) {
+      Serial.println("starting note");
+    }
+    
+    GREENSLEEVES[i].play();
+  
+    if (DEBUG) {
+      Serial.println(GREENSLEEVES[i].note_number);
+      Serial.println(GREENSLEEVES[i].duration_sixteenths);
+      Serial.println(GREENSLEEVES[i].duration_millis);
+    }
+  }
+}
+
 void setup() {
   pinMode(BPM_POT, INPUT);
-  
-  Serial.begin(9600);
-  Serial.println(GREENSLEEVES_LENGTH);
-  Serial.println(MILLISECONDS_PER_SIXTEENTH);
+
+  if (DEBUG) {
+    Serial.begin(9600);
+    Serial.println(GREENSLEEVES_LENGTH);
+    Serial.println(MILLISECONDS_PER_SIXTEENTH);
+  }
+
+  play_greensleeves();
 }
 
 void loop() {
-  Serial.println("starting loop");
-  
-  for (int i = 0; i < GREENSLEEVES_LENGTH; i++) {
-    Serial.println("starting note");
-    
-    GREENSLEEVES[i].play();
-//    Serial.println(greensleeves[i].note_number);
-//    Serial.println(greensleeves[i].sixteenth_duration);
-//    Serial.println(greensleeves[i].millis_duration);
-  }
-   
+//  play_greensleeves(); // A little quieter.
 }
