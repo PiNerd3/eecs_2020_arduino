@@ -9,3 +9,7 @@ Other, of various usefullness
 - https://stackoverflow.com/questions/13357312/arduino-servo-struct-does-not-name-a-type#comment18233186_13357312
 - https://stackoverflow.com/questions/612328/difference-between-struct-and-typedef-struct-in-c
 - https://forum.arduino.cc/index.php?topic=80086.0
+
+### Tryna look at the compiled code
+
+- https://godbolt.org/z/z9Yd8-

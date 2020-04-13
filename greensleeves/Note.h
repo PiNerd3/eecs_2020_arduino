@@ -32,11 +32,11 @@ int millisecondsPerSixteenthAtBPM(int BPM) {
 };
 
 void play(Note* note, int pin, int BPM) {
-    const int millis_to_play = note->duration_sixteenths * millisecondsPerSixteenthAtBPM(BPM);
-    
-    if (!note->is_rest) {
-      tone(pin, note->pitch, millis_to_play);
-    }
-    
-    delay(millis_to_play + 5);
+  const int millis_to_play = note->duration_sixteenths * millisecondsPerSixteenthAtBPM(BPM);
+  
+  if (!note->is_rest) {
+    tone(pin, note->pitch, millis_to_play);
   }
+  
+  delay(millis_to_play + 5);
+}
