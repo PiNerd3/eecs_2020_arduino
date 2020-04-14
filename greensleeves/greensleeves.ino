@@ -117,7 +117,7 @@ Note GREENSLEEVES[] = {
 
 const int GREENSLEEVES_LENGTH = sizeof(GREENSLEEVES) / sizeof(Note);
 
-Song* greensleeves_as_song = new Song(&GREENSLEEVES, PASSIVE_BUZZER, DEFAULT_BPM);
+Song<GREENSLEEVES_LENGTH>* greensleeves_as_song = new Song<GREENSLEEVES_LENGTH>(&GREENSLEEVES, PASSIVE_BUZZER, DEFAULT_BPM);
 
 // Program proper.
 

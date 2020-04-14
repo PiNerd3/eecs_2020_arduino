@@ -43,22 +43,15 @@ void play(Note* note, int pin, int BPM) {
   delay(millis_to_play + 5);
 }
 
+template<int MELODY_LENGTH>
 struct Song {
-  Note (*melody)[76];
-  int BPM;
+  Note (*melody)[MELODY_LENGTH];
   int song_length;
   int buzzer_pin;
+  int BPM;
 
-  Song(Note (*melody)[76], int buzzer_pin, int BPM)
-    : buzzer_pin(buzzer_pin), BPM(BPM), melody(melody) {
-
-    for (int i = 0; i < 256; i++) {
-      if (((*melody)[i]).pitch == NOTE_SONG_END) {
-        song_length = i;
-        break; 
-      }
-    }
-  }
+  Song(Note (*melody)[MELODY_LENGTH], int buzzer_pin, int BPM)
+    : melody(melody), song_length(MELODY_LENGTH), buzzer_pin(buzzer_pin), BPM(BPM) {}
 
   void play_song() {
     for (int i = 0; i < song_length; i++) {
