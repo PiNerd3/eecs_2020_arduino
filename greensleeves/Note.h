@@ -12,7 +12,7 @@ struct Note {
   static int note_count;
   
   Note(int pitch, int duration) {
-    if (pitch == NOTE_R) {
+    if (pitch == NOTE_R || pitch == NOTE_SONG_END) {
       this->is_rest = true;
     } else {
       this->is_rest = false;
@@ -27,6 +27,8 @@ struct Note {
 
 int Note::note_count = 0; // Needs to be initialized here.
 
+const size_t NOTE_SIZE = sizeof(Note);
+
 int millisecondsPerSixteenthAtBPM(int BPM) {
   return (int)((60.0 * 1000.0) / (BPM * 2.0));
 };
@@ -40,3 +42,27 @@ void play(Note* note, int pin, int BPM) {
   
   delay(millis_to_play + 5);
 }
+
+struct Song {
+  Note (*melody)[76];
+  int BPM;
+  int song_length;
+  int buzzer_pin;
+
+  Song(Note (*melody)[76], int buzzer_pin, int BPM)
+    : buzzer_pin(buzzer_pin), BPM(BPM), melody(melody) {
+
+    for (int i = 0; i < 256; i++) {
+      if (((*melody)[i]).pitch == NOTE_SONG_END) {
+        song_length = i;
+        break; 
+      }
+    }
+  }
+
+  void play_song() {
+    for (int i = 0; i < song_length; i++) {
+      play(&((*melody)[i]), buzzer_pin, BPM);
+    }
+  }
+};

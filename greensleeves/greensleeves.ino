@@ -1,6 +1,4 @@
-#include "pitches.h"
 #include "Note.h"
-#include "pitches.h"
 
 // Settings.
 
@@ -22,31 +20,21 @@ const int INTER_NOTE_DELAY = 10; // Mimic the action of a real musician with a m
 
 // Utility and setup.
 
-
 const int MILLISECONDS_PER_SIXTEENTH = millisecondsPerSixteenthAtBPM(DEFAULT_BPM);
 
-int calculateMillisecondsPerSixteenthFromPot(const int baseBPM = LOWEST_VARIABLE_BPM, const int topBPM = HIGHEST_VARIABLE_BPM) {
-  const int pot_val = analogRead(BPM_POT);
-  const double BPM_val = (pot_val / 1023.0) * (topBPM - baseBPM) + baseBPM;
+int calculateBPMFromPot(const int pot_pin, const int baseBPM = LOWEST_VARIABLE_BPM, const int topBPM = HIGHEST_VARIABLE_BPM) {
+  const int pot_val = analogRead(pot_pin);
+  const int BPM_val = int((pot_val / 1023.0) * (topBPM - baseBPM) + baseBPM);
   if (DEBUG) {
     Serial.println(pot_val);
     Serial.println(BPM_val);
   }
-  return millisecondsPerSixteenthAtBPM((int)BPM_val);
+  return BPM_val;
 };
-
-/** `make_note` helper function.
- *  Doesn't work, for some reason.
- *  Compiler doesn't recognize type here even though it does in, say, the declaration of GREENSLEEVES.
 
 Note* make_note(int pitch, int duration) {
-  Note* ret = new Note(pitch, duration);
-  ret->pitch = pitch;
-  ret->sixteenth_duration = duration;
-  return ret;
+  return new Note(pitch, duration);
 };
-
-*/
 
 Note GREENSLEEVES[] = {
   Note(NOTE_R, 10),
@@ -123,20 +111,31 @@ Note GREENSLEEVES[] = {
   Note(NOTE_DS5, 2),
   Note(NOTE_E5, 6),
   Note(NOTE_E5, 4),
-  Note(NOTE_R, 2)
+  Note(NOTE_R, 2),
+  Note(NOTE_SONG_END, 0)
 };
 
 const int GREENSLEEVES_LENGTH = sizeof(GREENSLEEVES) / sizeof(Note);
 
+Song* greensleeves_as_song = new Song(&GREENSLEEVES, PASSIVE_BUZZER, DEFAULT_BPM);
+
+// Program proper.
+
 void play_greensleeves() {
+  if (DEBUG) {
+    Serial.println("Starting song.");
+  }
+  
   for (int i = 0; i < GREENSLEEVES_LENGTH; i++) {
     if (DEBUG) {
-      Serial.println("starting note");
+      Serial.println("Starting note.");
     }
-    
-//    GREENSLEEVES[i].play();
 
-    play(&GREENSLEEVES[i], PASSIVE_BUZZER, DEFAULT_BPM);
+    if (VARIABLE_BPM) {
+      play(&GREENSLEEVES[i], PASSIVE_BUZZER, calculateBPMFromPot(BPM_POT));
+    } else {
+      play(&GREENSLEEVES[i], PASSIVE_BUZZER, DEFAULT_BPM);
+    }
   
     if (DEBUG) {
       Serial.println(GREENSLEEVES[i].note_number);
@@ -152,9 +151,12 @@ void setup() {
     Serial.begin(9600);
     Serial.println(GREENSLEEVES_LENGTH);
     Serial.println(MILLISECONDS_PER_SIXTEENTH);
+
+    Serial.println("Finished with setup.\n");
   }
 
-  play_greensleeves();
+//  play_greensleeves();
+  greensleeves_as_song->play_song();
 }
 
 void loop() {

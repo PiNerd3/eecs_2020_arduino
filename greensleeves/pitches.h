@@ -91,3 +91,4 @@
 #define NOTE_DS8 4978
 
 #define NOTE_R 5000 // Representing a rest. Just something unreachable.
+#define NOTE_SONG_END 5001
