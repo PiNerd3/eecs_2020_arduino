@@ -33,7 +33,7 @@ int millisecondsPerSixteenthAtBPM(int BPM) {
   return (int)((60.0 * 1000.0) / (BPM * 2.0));
 };
 
-void play(Note* note, int pin, int BPM) {
+void play_note(Note* note, int pin, int BPM) {
   const int millis_to_play = note->duration_sixteenths * millisecondsPerSixteenthAtBPM(BPM);
   
   if (!note->is_rest) {
@@ -53,9 +53,9 @@ struct Song {
   Song(Note (*melody)[MELODY_LENGTH], int buzzer_pin, int BPM)
     : melody(melody), song_length(MELODY_LENGTH), buzzer_pin(buzzer_pin), BPM(BPM) {}
 
-  void play_song() {
+  void play() {
     for (int i = 0; i < song_length; i++) {
-      play(&((*melody)[i]), buzzer_pin, BPM);
+      play_note(&((*melody)[i]), buzzer_pin, BPM);
     }
   }
 };

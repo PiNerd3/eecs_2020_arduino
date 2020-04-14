@@ -36,7 +36,7 @@ Note* make_note(int pitch, int duration) {
   return new Note(pitch, duration);
 };
 
-Note GREENSLEEVES[] = {
+Note GREENSLEEVES_NOTES[] = {
   Note(NOTE_R, 10),
   Note(NOTE_E5, 2),
   Note(NOTE_G5, 4),
@@ -115,9 +115,9 @@ Note GREENSLEEVES[] = {
   Note(NOTE_SONG_END, 0)
 };
 
-const int GREENSLEEVES_LENGTH = sizeof(GREENSLEEVES) / sizeof(Note);
+const int GREENSLEEVES_LENGTH = sizeof(GREENSLEEVES_NOTES) / sizeof(Note);
 
-Song<GREENSLEEVES_LENGTH>* greensleeves_as_song = new Song<GREENSLEEVES_LENGTH>(&GREENSLEEVES, PASSIVE_BUZZER, DEFAULT_BPM);
+const Song<GREENSLEEVES_LENGTH> GREENSLEEVES = Song<GREENSLEEVES_LENGTH>(&GREENSLEEVES_NOTES, PASSIVE_BUZZER, DEFAULT_BPM);
 
 // Program proper.
 
@@ -132,14 +132,14 @@ void play_greensleeves() {
     }
 
     if (VARIABLE_BPM) {
-      play(&GREENSLEEVES[i], PASSIVE_BUZZER, calculateBPMFromPot(BPM_POT));
+      play_note(&GREENSLEEVES_NOTES[i], PASSIVE_BUZZER, calculateBPMFromPot(BPM_POT));
     } else {
-      play(&GREENSLEEVES[i], PASSIVE_BUZZER, DEFAULT_BPM);
+      play_note(&GREENSLEEVES_NOTES[i], PASSIVE_BUZZER, DEFAULT_BPM);
     }
   
     if (DEBUG) {
-      Serial.println(GREENSLEEVES[i].note_number);
-      Serial.println(GREENSLEEVES[i].duration_sixteenths);
+      Serial.println(GREENSLEEVES_NOTES[i].note_number);
+      Serial.println(GREENSLEEVES_NOTES[i].duration_sixteenths);
     }
   }
 }
@@ -156,7 +156,7 @@ void setup() {
   }
 
 //  play_greensleeves();
-  greensleeves_as_song->play_song();
+  GREENSLEEVES.play();
 }
 
 void loop() {
