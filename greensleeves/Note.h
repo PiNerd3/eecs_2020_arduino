@@ -44,18 +44,17 @@ void play(Note* note, int pin, int BPM) {
 }
 
 struct Song {
-  Note* m_melody;
-  int m_BPM;
-  int m_song_length;
-  int m_buzzer_pin;
+  Note (*melody)[76];
+  int BPM;
+  int song_length;
+  int buzzer_pin;
 
-  Song(Note* melody, int buzzer_pin, int BPM)
-    : m_buzzer_pin(buzzer_pin), m_BPM(BPM) {
+  Song(Note (*melody)[76], int buzzer_pin, int BPM)
+    : buzzer_pin(buzzer_pin), BPM(BPM), melody(melody) {
 
     for (int i = 0; i < 256; i++) {
       if (((*melody)[i]).pitch == NOTE_SONG_END) {
-        m_song_length = i;
-        m_melody = new Note[m_song_length]();
+        song_length = i;
         break; 
       }
     }
@@ -63,7 +62,7 @@ struct Song {
 
   void play_song() {
     for (int i = 0; i < song_length; i++) {
-      play(&(m_melody[i]), m_buzzer_pin, m_BPM);
+      play(&((*melody)[i]), buzzer_pin, BPM);
     }
   }
 };
