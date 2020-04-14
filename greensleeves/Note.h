@@ -2,6 +2,8 @@
 
 #include "pitches.h"
 
+namespace song {
+
 struct Note {
   int pitch;
   int duration_sixteenths; // Length in sixteenths
@@ -27,20 +29,24 @@ struct Note {
 
 int Note::note_count = 0; // Needs to be initialized here.
 
+Note* make_note(int pitch, int duration) {
+  return new Note(pitch, duration);
+};
+
 const size_t NOTE_SIZE = sizeof(Note);
 
 int millisecondsPerSixteenthAtBPM(int BPM) {
   return (int)((60.0 * 1000.0) / (BPM * 2.0));
 };
 
-void play_note(Note* note, int pin, int BPM) {
+void play_note(Note* note, int pin, int BPM, int milli_delay = 5) {
   const int millis_to_play = note->duration_sixteenths * millisecondsPerSixteenthAtBPM(BPM);
   
   if (!note->is_rest) {
     tone(pin, note->pitch, millis_to_play);
   }
   
-  delay(millis_to_play + 5);
+  delay(millis_to_play + milli_delay);
 }
 
 template<int MELODY_LENGTH>
@@ -59,3 +65,5 @@ struct Song {
     }
   }
 };
+
+} // namespace Song

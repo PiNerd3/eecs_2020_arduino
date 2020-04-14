@@ -20,6 +20,8 @@ const int INTER_NOTE_DELAY = 10; // Mimic the action of a real musician with a m
 
 // Utility and setup.
 
+using namespace song;
+
 const int MILLISECONDS_PER_SIXTEENTH = millisecondsPerSixteenthAtBPM(DEFAULT_BPM);
 
 int calculateBPMFromPot(const int pot_pin, const int baseBPM = LOWEST_VARIABLE_BPM, const int topBPM = HIGHEST_VARIABLE_BPM) {
@@ -30,10 +32,6 @@ int calculateBPMFromPot(const int pot_pin, const int baseBPM = LOWEST_VARIABLE_B
     Serial.println(BPM_val);
   }
   return BPM_val;
-};
-
-Note* make_note(int pitch, int duration) {
-  return new Note(pitch, duration);
 };
 
 Note GREENSLEEVES_NOTES[] = {
@@ -121,29 +119,6 @@ const Song<GREENSLEEVES_LENGTH> GREENSLEEVES = Song<GREENSLEEVES_LENGTH>(&GREENS
 
 // Program proper.
 
-void play_greensleeves() {
-  if (DEBUG) {
-    Serial.println("Starting song.");
-  }
-  
-  for (int i = 0; i < GREENSLEEVES_LENGTH; i++) {
-    if (DEBUG) {
-      Serial.println("Starting note.");
-    }
-
-    if (VARIABLE_BPM) {
-      play_note(&GREENSLEEVES_NOTES[i], PASSIVE_BUZZER, calculateBPMFromPot(BPM_POT));
-    } else {
-      play_note(&GREENSLEEVES_NOTES[i], PASSIVE_BUZZER, DEFAULT_BPM);
-    }
-  
-    if (DEBUG) {
-      Serial.println(GREENSLEEVES_NOTES[i].note_number);
-      Serial.println(GREENSLEEVES_NOTES[i].duration_sixteenths);
-    }
-  }
-}
-
 void setup() {
   pinMode(BPM_POT, INPUT);
 
@@ -155,10 +130,7 @@ void setup() {
     Serial.println("Finished with setup.\n");
   }
 
-//  play_greensleeves();
   GREENSLEEVES.play();
 }
 
-void loop() {
-//  play_greensleeves(); // A little quieter.
-}
+void loop() {}
