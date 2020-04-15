@@ -59,7 +59,7 @@ struct Song {
   Song(Note (*melody)[MELODY_LENGTH], int buzzer_pin, int BPM)
     : melody(melody), song_length(MELODY_LENGTH), buzzer_pin(buzzer_pin), BPM(BPM) {}
 
-  void play() {
+  void play() const {
     for (int i = 0; i < song_length; i++) {
       play_note(&((*melody)[i]), buzzer_pin, BPM);
     }

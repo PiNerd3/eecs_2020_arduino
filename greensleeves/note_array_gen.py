@@ -1,7 +1,5 @@
 import string
-import pprint
 
-# TARGET_NOTE_LINE = "  Note(NOTE_{pitch}, {dur}),"
 DEFAULT_OCTAVE = '5'
 ENHARMS = {
 	"AF": "GS",
@@ -93,7 +91,7 @@ def tool():
 		string_builder.append(f"  Note(NOTE_{pitch}{octave}, {dur}),")
 	string_builder.append("  Note(NOTE_SONG_END, 0)")
 
-	print(f"Note {song_name}_NOTES[] = {{\n" + "\n".join(string_builder) + "\n};")
+	print(f"Note {song_name}_NOTES[] = {{\n" + "\n".join(string_builder) + "\n};\n\n" + f"const int {song_name}_LENGTH = sizeof({song_name}_NOTES) / sizeof(Note);\n\n" + f"const Song<{song_name}_LENGTH> {song_name} = Song<{song_name}_LENGTH>(&{song_name}_NOTES, ____buzzer___, ___bpm___);")
 
 
 def main():

@@ -117,6 +117,43 @@ const int GREENSLEEVES_LENGTH = sizeof(GREENSLEEVES_NOTES) / sizeof(Note);
 
 const Song<GREENSLEEVES_LENGTH> GREENSLEEVES = Song<GREENSLEEVES_LENGTH>(&GREENSLEEVES_NOTES, PASSIVE_BUZZER, DEFAULT_BPM);
 
+Note MINUTE_WALTZ_NOTES[] = {
+  Note(NOTE_GS5, 2),
+  Note(NOTE_G5, 5),
+  Note(NOTE_GS5, 5),
+  Note(NOTE_C6, 5),
+  Note(NOTE_AS5, 5),
+  Note(NOTE_G5, 5),
+  Note(NOTE_GS5, 5),
+  Note(NOTE_AS5, 5),
+  Note(NOTE_GS5, 5),
+  Note(NOTE_C6, 5),
+  Note(NOTE_AS5, 5),
+  Note(NOTE_G5, 5),
+  Note(NOTE_GS5, 5),
+  Note(NOTE_C6, 5),
+  Note(NOTE_AS5, 5),
+  Note(NOTE_G5, 5),
+  Note(NOTE_GS5, 5),
+  Note(NOTE_C6, 5),
+  Note(NOTE_AS5, 5),
+  Note(NOTE_G5, 5),
+  Note(NOTE_GS5, 5),
+  Note(NOTE_C6, 5),
+  Note(NOTE_AS5, 5),
+  Note(NOTE_G5, 5),
+  Note(NOTE_GS5, 5),
+  Note(NOTE_C6, 5),
+  Note(NOTE_AS5, 5),
+  Note(NOTE_G5, 5),
+  Note(NOTE_GS5, 5),
+  Note(NOTE_SONG_END, 0)
+};
+
+const int MINUTE_WALTZ_LENGTH = sizeof(MINUTE_WALTZ_NOTES) / sizeof(Note);
+
+const Song<MINUTE_WALTZ_LENGTH> MINUTE_WALTZ = Song<MINUTE_WALTZ_LENGTH>(&MINUTE_WALTZ_NOTES, PASSIVE_BUZZER, DEFAULT_BPM * 12);
+
 // Program proper.
 
 void setup() {
@@ -130,6 +167,9 @@ void setup() {
     Serial.println("Finished with setup.\n");
   }
 
+  for (int i = 0; i < 6; i++) {
+    MINUTE_WALTZ.play();
+  }
   GREENSLEEVES.play();
 }
 
