@@ -13,3 +13,8 @@ Other, of various usefullness
 ### Tryna look at the compiled code
 
 - https://godbolt.org/z/z9Yd8-
+
+### Looking for the source files I need to compile to binary on godbolt
+
+- https://grep.app/search?q=tone%7Cdelay&regexp=true&filter[repo][0]=arduino/ArduinoCore-avr
+- https://github.com/arduino/ArduinoCore-avr/tree/master/cores/arduino
