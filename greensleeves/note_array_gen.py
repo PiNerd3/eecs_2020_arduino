@@ -44,10 +44,15 @@ def tool():
 	
 	song_name = strip_and_upper(input("Song name:\n")).replace(" ", "_")
 	
-	key = KEY_SIGS[strip_and_upper(input("Key?\n"))]
+	key_name = strip_and_upper(input("Key?\n"))
+	if key_name in KEY_SIGS:
+		key = KEY_SIGS[key_name]
+	else:
+		key = KEY_SIGS[ENHARMS[key_name]]
 	
 	default_octave = DEFAULT_OCTAVE
-	if ask_for_octave := input("Default octave? Leave blank for 5.\n").strip() and len(ask_for_octave) == 1 and ask_for_octave in string.digits:
+	ask_for_octave = input("Default octave? Leave blank for 5.\n").strip()
+	if len(ask_for_octave) == 1 and ask_for_octave in string.digits:
 		default_octave = ask_for_octave
 	
 	default_length = None
@@ -73,7 +78,7 @@ def tool():
 		if " " in note_string:
 			pitch, dur = note_string.split(" ")
 		else:
-			pitch, dur = note_string, default_octave
+			pitch, dur = note_string, default_length
 		
 		if pitch[-1] in string.digits:
 			octave = pitch[-1]
@@ -100,26 +105,3 @@ def main():
 if __name__ == "__main__":
 	# main()
 	tool()
-	
-"""
-Note MINUTE_WALTZ_NOTES[] = {
-  Note(NOTE_GS5, 2),
-  Note(NOTE_G5, 5),
-  Note(NOTE_GS5, 5),
-  Note(NOTE_C5, 5),
-  Note(NOTE_AS5, 5),
-  Note(NOTE_G5, 5),
-  Note(NOTE_GS5, 5),
-  Note(NOTE_AS5, 5),
-  Note(NOTE_GS5, 5),
-  Note(NOTE_C5, 5),
-  Note(NOTE_AS5, 5),
-  Note(NOTE_G5, 5),
-  Note(NOTE_GS5, 5),
-  Note(NOTE_C5, 5),
-  Note(NOTE_AS5, 5),
-  Note(NOTE_G5, 5),
-  Note(NOTE_GS5, 5),
-  Note(NOTE_SONG_END, 0)
-};
-"""
