@@ -1,8 +1,8 @@
 // ------------- BEGIN GENERATED CODE -------------
 
 /**
- * HELLO_WORLD
- * A sketch to play HELLO_WORLD using an Arduino Uno, a passive buzzer, and (optionally) a potentiometer.
+ * "Happy Birthday"
+ * A sketch to play "Happy Birthday" using an Arduino Uno, a passive buzzer, and (optionally) a potentiometer.
  * Generated 2020-04-20 by Arduino Song Tool (name wip), which is written and made available by Nathaniel Hamovitz.
  * To generate your own musical sketch, go to https://Arduino-Song-Tool-name-wip.nathanielhamovitz.repl.run and follow the instructions.
  */
@@ -109,7 +109,7 @@ const int NOTE_R = 5000; // Representing a rest. Just something unreachable.
 const int PASSIVE_BUZZER = 5;
 
 //  BPM
-const int DEFAULT_BPM = 160;
+const int DEFAULT_BPM = 450;
 
 #if VARIABLE_BPM
   const int BPM_POT = A3;
@@ -169,17 +169,15 @@ void play_note(Note* note, int milli_delay = 5) {
   // delay(millis_to_play + (int)(0.05 * (double)millis_to_play)); // Or possibly this
 }
 
-Note HELLO_WORLD_NOTES[] = {
-  Note(NOTE_AS5, 4),  Note(NOTE_B5, 4),  Note(NOTE_C5, 4),  Note(NOTE_DS5, 4),  Note(NOTE_E5, 4),  Note(NOTE_F5, 4),  Note(NOTE_GS5, 4),  Note(NOTE_AS5, 4),  Note(NOTE_C5, 4),  Note(NOTE_CS5, 4),  Note(NOTE_DS5, 4),  Note(NOTE_F5, 4),  Note(NOTE_FS5, 4),  Note(NOTE_GS5, 4),  Note(NOTE_GS5, 4),  Note(NOTE_AS5, 4),  Note(NOTE_B5, 4),  Note(NOTE_CS5, 4),  Note(NOTE_DS5, 4),  Note(NOTE_E5, 4),  Note(NOTE_FS5, 4),  Note(NOTE_A5, 4),  Note(NOTE_B5, 4),  Note(NOTE_C5, 4),  Note(NOTE_D5, 4),  Note(NOTE_E5, 4),  Note(NOTE_F5, 4),  Note(NOTE_G5, 4),
+Note HAPPY_BIRTHDAY_NOTES[] = {
+  Note(NOTE_C5, 3), Note(NOTE_C5, 1), Note(NOTE_D5, 4), Note(NOTE_C5, 4), Note(NOTE_F5, 4), Note(NOTE_E5, 8), Note(NOTE_C5, 3), Note(NOTE_C5, 1), Note(NOTE_D5, 4), Note(NOTE_C5, 4), Note(NOTE_G5, 4), Note(NOTE_F5, 8), Note(NOTE_C5, 3), Note(NOTE_C5, 1), Note(NOTE_C6, 4), Note(NOTE_D5, 4), Note(NOTE_F5, 4), Note(NOTE_E5, 4), Note(NOTE_C5, 6), Note(NOTE_B5, 3), Note(NOTE_B5, 1), Note(NOTE_A5, 4), Note(NOTE_F5, 4), Note(NOTE_G5, 4), Note(NOTE_F5, 8),
 };
 
-const int HELLO_WORLD_LENGTH = sizeof(HELLO_WORLD_NOTES) / sizeof(Note);
-
-
+const int HAPPY_BIRTHDAY_LENGTH = sizeof(HAPPY_BIRTHDAY_NOTES) / sizeof(Note);
 
 void play_song() {
-  for (int i = 0; i < HELLO_WORLD_LENGTH; i++) {
-    play_note(&(HELLO_WORLD_NOTES[i]));
+  for (int i = 0; i < HAPPY_BIRTHDAY_LENGTH; i++) {
+    play_note(&(HAPPY_BIRTHDAY_NOTES[i]));
   }
 }
 

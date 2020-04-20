@@ -290,7 +290,7 @@ def tool():
       default_length = None
 
     note_strings = []
-    print("Please enter your melody. Each note is on a new line. Format: <Note><Octave> <Length in beats>")
+    print("\nPlease enter your Please enter your melody. Each note is on a new line. Format: <Note><Octave> <Length in beats>")
     while (new_note_string := sanitized_input('')) != '': #nolint #nofmt
         if " " not in new_note_string and default_length is None:
           print("Because you did not enter a default length, you must supply the length of each note. Please try again (your previous entry was discarded).")
@@ -311,8 +311,8 @@ def tool():
         else:
             octave = default_octave
 
-        while pitch in OPPOSITE_ENHARMS:
-          pitch = OPPOSITE_ENHARMS[pitch]
+        # while pitch in OPPOSITE_ENHARMS:
+        #   pitch = OPPOSITE_ENHARMS[pitch]
         while pitch in key:
             pitch = key[pitch]
         while pitch in ENHARMS:
