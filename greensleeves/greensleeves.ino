@@ -20,7 +20,7 @@ const int HIGHEST_VARIABLE_BPM = 300;
 // Utility and setup.
 
 inline int millisecondsPerSixteenthAtBPM(int BPM) {
-  return (int)((60.0 * 1000.0) / (BPM * 2.0));
+  return (int)((60.0 * 1000.0) / (BPM * 4.0)); // TODO: check for correctness
 };
 
 const int MILLISECONDS_PER_SIXTEENTH = millisecondsPerSixteenthAtBPM(DEFAULT_BPM);
@@ -52,21 +52,16 @@ struct Note {
   }
 };
 
-void play(Note* note, bool variable_speed = VARIABLE_BPM) {
-    int millis_to_play;
-    if (variable_speed) {
-      millis_to_play = note->duration_sixteenths * calculateMillisecondsPerSixteenthFromPot();
-    } else {
-      millis_to_play = note->duration_millis;
-    }
-    
-    if (!note->is_rest) {
-      tone(PASSIVE_BUZZER, note->pitch, millis_to_play);
-    }
-    
-    delay(millis_to_play + (int)(0.05 * (double)millis_to_play));
+void play_note(Note* note, int BPM, int milli_delay = 5) {
+  const int millis_to_play = note->duration_sixteenths * millisecondsPerSixteenthAtBPM(BPM);
+  
+  if (!note->is_rest) {
+    tone(PASSIVE_BUZZER, note->pitch, millis_to_play);
   }
-};
+  
+  delay(millis_to_play + milli_delay);
+  // delay(millis_to_play + (int)(0.05 * (double)millis_to_play)); // Or possibly this
+}
 
 
 Note GREENSLEEVES[] = {
