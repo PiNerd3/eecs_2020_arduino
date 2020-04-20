@@ -343,8 +343,8 @@ def tool():
     else:
       pot_pin = "A0"
 
-    print(WHOLE_FILE.format(buzzer_pin=buzzer_pin, bpm_pot_pin=pot_pin, default_bpm=bpm, enable_variable_bpm=str(do_variable_bpm).lower(), gened_code=(f"Note {song_name}_NOTES[] = {{\n" + " ".join(
-        string_builder) + "\n};\n\n" + f"const int {song_name}_LENGTH = sizeof({song_name}_NOTES) / sizeof(Note);\n\n"), song_name=song_name, date=datetime.date.today(), website_url="https://Arduino-Song-Tool-name-wip.nathanielhamovitz.repl.run", song_name_human= song_name_human))
+    print(WHOLE_FILE.format(buzzer_pin=buzzer_pin, bpm_pot_pin=pot_pin, default_bpm=bpm, enable_variable_bpm=str(do_variable_bpm).lower(), gened_code=(f"Note {song_name}_NOTES[] = {{\n  " + " ".join(
+        string_builder) + "\n};\n\n" + f"const int {song_name}_LENGTH = sizeof({song_name}_NOTES) / sizeof(Note);"), song_name=song_name, date=datetime.date.today(), website_url="https://Arduino-Song-Tool-name-wip.nathanielhamovitz.repl.run", song_name_human= song_name_human))
 
 
 def main():
