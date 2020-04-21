@@ -102,7 +102,7 @@ const int NOTE_CS8 = 4435;
 const int NOTE_D8 = 4699;
 const int NOTE_DS8 = 4978;
 
-const int NOTE_R = 5000; // Representing a rest. Just something unreachable.
+const int NOTE_R = -2; // Representing a rest. Just something unreachable.
 
 
 // Settings.
@@ -233,17 +233,18 @@ KEY_SIGS["GF"] = dict(KEY_SIGS["DF"], C="CF")
 def sanitized_input(_str):
     return input(_str).strip().upper()
 
-def get_input_satisfying(q, stern_q, func, sanitize = True):
-  if sanitize:
-    res = sanitized_input(q)
-    while not func(res):
-      res = sanitized_input(stern_q)
-    return res
-  else:
-    res = input(q)
-    while not func(res):
-      res = input(stern_q)
-    return res
+
+def get_input_satisfying(q, stern_q, func, sanitize=True):
+    if sanitize:
+        res = sanitized_input(q)
+        while not func(res):
+            res = sanitized_input(stern_q)
+        return res
+    else:
+        res = input(q)
+        while not func(res):
+            res = input(stern_q)
+        return res
 
 
 def tool():
@@ -256,10 +257,12 @@ def tool():
 
     print("Hello and welcome to Arduino Song Tool (name wip).\n")
 
-    song_name_human = get_input_satisfying("Song name:\n", "Song names must start with a letter and must be alphanumeric (spaces are allowed). Please try again:\n", lambda s: re.fullmatch(r"[a-zA-Z][a-zA-Z0-9 ]*", s), sanitize = False)
+    song_name_human = get_input_satisfying("Song name:\n", "Song names must start with a letter and must be alphanumeric (spaces are allowed). Please try again:\n",
+                                           lambda s: re.fullmatch(r"[a-zA-Z][a-zA-Z0-9 ]*", s), sanitize=False)
     song_name = song_name_human.strip().upper().replace(" ", "_")
 
-    key_name = get_input_satisfying("Key?\n", "Please enter a valid key name.\n", lambda s: s in KEYS)
+    key_name = get_input_satisfying(
+        "Key?\n", "Please enter a valid key name.\n", lambda s: s in KEYS)
     key = None
     if key_name in KEY_SIGS:
         key = KEY_SIGS[key_name]
@@ -270,32 +273,34 @@ def tool():
     assert(key is not None)
 
     def check_octave(_str):
-      try:
-        oct = int(_str)
-        return 0 < oct <= 8
-      except ValueError:
-        return _str == ''
-    default_octave = get_input_satisfying(f"Default octave (1 through 8)? Leave blank for {DEFAULT_OCTAVE}.\n", f"Please enter a valid octave. Leave blank for {DEFAULT_OCTAVE}.\n", check_octave)
+        try:
+            oct = int(_str)
+            return 0 < oct <= 8
+        except ValueError:
+            return _str == ''
+    default_octave = get_input_satisfying(
+        f"Default octave (1 through 8)? Leave blank for {DEFAULT_OCTAVE}.\n", f"Please enter a valid octave. Leave blank for {DEFAULT_OCTAVE}.\n", check_octave)
     if default_octave == '':
-      default_octave = DEFAULT_OCTAVE
+        default_octave = DEFAULT_OCTAVE
 
     def check_length(_str):
-      try:
-          l = int(_str)
-          return l > 1
-      except ValueError:
-          return _str == ''
-    default_length = get_input_satisfying("Default note length (in beats)? Leave blank for erroring when you leave length out.\n", "Please enter a valid note length (in beats). Leave blank for erroring when you leave length out.\n", check_length)
+        try:
+            l = int(_str)
+            return l > 1
+        except ValueError:
+            return _str == ''
+    default_length = get_input_satisfying("Default note length (in beats)? Leave blank for erroring when you leave length out.\n",
+                                          "Please enter a valid note length (in beats). Leave blank for erroring when you leave length out.\n", check_length)
     if default_length == '':
-      default_length = None
+        default_length = None
 
     note_strings = []
     print("\nPlease enter your Please enter your melody. Each note is on a new line. Format: <Note><Octave> <Length in beats>")
     while (new_note_string := sanitized_input('')) != '': #nolint #nofmt
         if " " not in new_note_string and default_length is None:
-          print("Because you did not enter a default length, you must supply the length of each note. Please try again (your previous entry was discarded).")
+            print("Because you did not enter a default length, you must supply the length of each note. Please try again (your previous entry was discarded).")
         else:
-          note_strings.append(new_note_string)
+            note_strings.append(new_note_string)
 
     string_builder = []
     for note_string in note_strings:
@@ -321,30 +326,35 @@ def tool():
             pitch = pitch[:-1]
 
         string_builder.append(f"Note(NOTE_{pitch}{octave}, {dur}),")
-    
-    buzzer_pin = get_input_satisfying("What pin is your buzzer on? (Pin must be capable of generating a PWM signal - on the Arduino Uno, this is pins 3, 4, 5, 9, 10, and 11.)\n", "Please enter a valid pin.\n", lambda s: re.fullmatch(r"\d\d?", s))
+    string_builder[-1] = string_builder[-1][:-1]  # remove the comma
+
+    buzzer_pin = get_input_satisfying("What pin is your buzzer on? (Pin must be capable of generating a PWM signal - on the Arduino Uno, this is pins 3, 4, 5, 9, 10, and 11.)\n",
+                                      "Please enter a valid pin.\n", lambda s: re.fullmatch(r"\d\d?", s))
 
     def check_bpm(_str):
-      try:
-        l = int(_str)
-        return l > 0
-      except ValueError:
-        return False
-    bpm = get_input_satisfying("What is the BPM of your song?\n", "Please enter a positive integer.\n", check_bpm)
+        try:
+            l = int(_str)
+            return l > 0
+        except ValueError:
+            return False
+    bpm = get_input_satisfying(
+        "What is the BPM of your song?\n", "Please enter a positive integer.\n", check_bpm)
 
-    do_variable_bpm = get_input_satisfying("Use a potentiometer to control the tempo of your song as it plays? (y/n)\n", "Please enter a valid response.\n", lambda s: s in {'Y', 'N', 'YES', 'NO', 'T', 'F', 'TRUE', 'FALSE'})
+    do_variable_bpm = get_input_satisfying("Use a potentiometer to control the tempo of your song as it plays? (y/n)\n",
+                                           "Please enter a valid response.\n", lambda s: s in {'Y', 'N', 'YES', 'NO', 'T', 'F', 'TRUE', 'FALSE'})
     do_variable_bpm = do_variable_bpm in {'Y', 'YES', 'T', 'TRUE'}
-  
+
     pot_pin = None
     if do_variable_bpm:
-      def check_pot_pin(_str):
-        return _str == '' or re.fullmatch(r"A?\d\d?", _str)
-      pot_pin = get_input_satisfying("What pin is your potentiometer on? (Pin must be capable of reading an analog signal - on the Arduino Uno, this is pins A0 through A5.)\n", "Please enter a valid pin.\n", check_pot_pin)
+        def check_pot_pin(_str):
+            return _str == '' or re.fullmatch(r"A?\d\d?", _str)
+        pot_pin = get_input_satisfying(
+            "What pin is your potentiometer on? (Pin must be capable of reading an analog signal - on the Arduino Uno, this is pins A0 through A5.)\n", "Please enter a valid pin.\n", check_pot_pin)
     else:
-      pot_pin = "A0"
+        pot_pin = "A0"
 
-    print(WHOLE_FILE.format(buzzer_pin=buzzer_pin, bpm_pot_pin=pot_pin, default_bpm=bpm, enable_variable_bpm=str(do_variable_bpm).lower(), gened_code=(f"Note {song_name}_NOTES[] = {{\n  " + " ".join(
-        string_builder) + "\n};\n\n" + f"const int {song_name}_LENGTH = sizeof({song_name}_NOTES) / sizeof(Note);"), song_name=song_name, date=datetime.date.today(), website_url="https://Arduino-Song-Tool-name-wip.nathanielhamovitz.repl.run", song_name_human= song_name_human))
+    print("\nHere's the code for your song:\n\n\n\n" + WHOLE_FILE.format(buzzer_pin=buzzer_pin, bpm_pot_pin=pot_pin, default_bpm=bpm, enable_variable_bpm=str(do_variable_bpm).lower(), gened_code=(f"Note {song_name}_NOTES[] = {{\n  " + " ".join(
+        string_builder) + "\n};\n\n" + f"const int {song_name}_LENGTH = sizeof({song_name}_NOTES) / sizeof(Note);"), song_name=song_name, date=datetime.date.today(), website_url="https://Arduino-Song-Tool-name-wip.nathanielhamovitz.repl.run", song_name_human=song_name_human) + "\n\n")
 
 
 def main():
