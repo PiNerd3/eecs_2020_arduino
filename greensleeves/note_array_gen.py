@@ -7,7 +7,7 @@ WHOLE_FILE = """// ------------- BEGIN GENERATED CODE -------------
 /**
  * "{song_name_human}"
  * A sketch to play "{song_name_human}" using an Arduino Uno, a passive buzzer, and (optionally) a potentiometer.
- * Generated {date} by Arduino Song Tool (name wip), which is written and made available by Nathaniel Hamovitz.
+ * Generated {date} (approximately; time zones are hard) by Arduino Song Tool (name wip), which is written and made available by Nathaniel Hamovitz.
  * To generate your own musical sketch, go to {website_url} and follow the instructions.
  */
  
@@ -255,7 +255,8 @@ def tool():
     global KEYS
     global OPPOSITE_ENHARMS
 
-    print("Hello and welcome to Arduino Song Tool (name wip).\n")
+    print("Hello and welcome to Arduino Song Tool (name wip). Hope you enjoy.\n")
+    print("Two website which might be useful or interesting:\n - http://www.beatsperminuteonline.com/ - figure the BPM of a song by clicking or tapping\n - https://www.szynalski.com/tone-generator/ - tone generator, to compare pure tones of different waveforms and frequencies\n")
 
     song_name_human = get_input_satisfying("Song name:\n", "Song names must start with a letter and must be alphanumeric (spaces are allowed). Please try again:\n",
                                            lambda s: re.fullmatch(r"[a-zA-Z][a-zA-Z0-9 ]*", s), sanitize=False)
@@ -354,7 +355,7 @@ def tool():
         pot_pin = "A0"
 
     print("\nHere's the code for your song:\n\n\n\n" + WHOLE_FILE.format(buzzer_pin=buzzer_pin, bpm_pot_pin=pot_pin, default_bpm=bpm, enable_variable_bpm=str(do_variable_bpm).lower(), gened_code=(f"Note {song_name}_NOTES[] = {{\n  " + " ".join(
-        string_builder) + "\n};\n\n" + f"const int {song_name}_LENGTH = sizeof({song_name}_NOTES) / sizeof(Note);"), song_name=song_name, date=datetime.date.today(), website_url="https://Arduino-Song-Tool-name-wip.nathanielhamovitz.repl.run", song_name_human=song_name_human) + "\n\n")
+        string_builder) + "\n};\n\n" + f"const int {song_name}_LENGTH = sizeof({song_name}_NOTES) / sizeof(Note);"), song_name=song_name, date=datetime.date.today(), website_url="https://arduino-song-tool-name-wip.nathanielhamovitz.repl.run", song_name_human=song_name_human) + "\n\n")
 
 
 def main():
