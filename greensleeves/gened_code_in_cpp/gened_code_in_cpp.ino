@@ -3,7 +3,7 @@
 /**
  * "Happy Birthday"
  * A sketch to play "Happy Birthday" using an Arduino Uno, a passive buzzer, and (optionally) a potentiometer.
- * Generated 2020-04-20 by Arduino Song Tool (name wip), which is written and made available by Nathaniel Hamovitz.
+ * Generated 2020-04-21 by Arduino Song Tool (name wip), which is written and madeavailable by Nathaniel Hamovitz.
  * To generate your own musical sketch, go to https://Arduino-Song-Tool-name-wip.nathanielhamovitz.repl.run and follow the instructions.
  */
 
@@ -98,7 +98,7 @@ const int NOTE_CS8 = 4435;
 const int NOTE_D8 = 4699;
 const int NOTE_DS8 = 4978;
 
-const int NOTE_R = 5000; // Representing a rest. Just something unreachable.
+const int NOTE_R = -2; // Representing a rest. Just something unreachable.
 
 
 // Settings.
@@ -109,10 +109,10 @@ const int NOTE_R = 5000; // Representing a rest. Just something unreachable.
 const int PASSIVE_BUZZER = 5;
 
 //  BPM
-const int DEFAULT_BPM = 450;
+const int DEFAULT_BPM = 440;
 
 #if VARIABLE_BPM
-  const int BPM_POT = A3;
+  const int BPM_POT = A5;
   const int LOWEST_VARIABLE_BPM = (int)(0.5 * DEFAULT_BPM);
   const int HIGHEST_VARIABLE_BPM = 2 * DEFAULT_BPM;
 #endif
@@ -170,7 +170,7 @@ void play_note(Note* note, int milli_delay = 5) {
 }
 
 Note HAPPY_BIRTHDAY_NOTES[] = {
-  Note(NOTE_C5, 3), Note(NOTE_C5, 1), Note(NOTE_D5, 4), Note(NOTE_C5, 4), Note(NOTE_F5, 4), Note(NOTE_E5, 8), Note(NOTE_C5, 3), Note(NOTE_C5, 1), Note(NOTE_D5, 4), Note(NOTE_C5, 4), Note(NOTE_G5, 4), Note(NOTE_F5, 8), Note(NOTE_C5, 3), Note(NOTE_C5, 1), Note(NOTE_C6, 4), Note(NOTE_D5, 4), Note(NOTE_F5, 4), Note(NOTE_E5, 4), Note(NOTE_C5, 6), Note(NOTE_B5, 3), Note(NOTE_B5, 1), Note(NOTE_A5, 4), Note(NOTE_F5, 4), Note(NOTE_G5, 4), Note(NOTE_F5, 8),
+  Note(NOTE_C5, 3), Note(NOTE_C5, 1), Note(NOTE_D5, 4), Note(NOTE_C5, 4), Note(NOTE_F5, 4), Note(NOTE_E5, 8), Note(NOTE_C5, 3), Note(NOTE_C5, 1), Note(NOTE_D5, 4), Note(NOTE_C5, 4), Note(NOTE_G5, 4), Note(NOTE_F5, 8), Note(NOTE_C5, 3), Note(NOTE_C5, 1), Note(NOTE_C6, 4), Note(NOTE_A5, 4), Note(NOTE_F5, 4), Note(NOTE_E5, 4), Note(NOTE_D5, 6), Note(NOTE_AS5, 3), Note(NOTE_AS5, 1), Note(NOTE_A5, 4), Note(NOTE_F5, 4), Note(NOTE_G5, 4), Note(NOTE_F5, 8)
 };
 
 const int HAPPY_BIRTHDAY_LENGTH = sizeof(HAPPY_BIRTHDAY_NOTES) / sizeof(Note);
