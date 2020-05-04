@@ -53,8 +53,8 @@ const int RED = 5;
 const int GREEN = 6;
 const int BLUE = 3;
 
-const int Y_AXIS_ = A3; // Pin A5. On board as `VY`. `Y_AXIS` is a reserved token.
-const int X_AXIS_ = A5; // Pin A3. On board as `VX`. `X_AXIS` is a reserved token.
+const int Y_AXIS_ = A3; // On board as `VY`. `Y_AXIS` is a reserved token.
+const int X_AXIS_ = A5; // On board as `VX`. `X_AXIS` is a reserved token.
 const int SWITCH = 2; // Pin 2. On board as `SW`.
 
 const int DATA_PIN = 12;
@@ -152,16 +152,12 @@ void setup() {
   pinMode(DATA_PIN, OUTPUT);
 
   turn_off_seven_segment();
-//  turn_on_seven_segment();
-
-  Serial.begin(9600);
 }
 
 void loop() {
   pressed = digitalRead(SWITCH) == HIGH ? false : true;
   if (!pressed) {
     if (was_pressed) {
-//      Serial.print("Switching color! Color was: "); Serial.println(humidity_color);
       if (humidity_color == 'R') {
         humidity_color = 'G';
       } else if (humidity_color == 'G') {
@@ -169,7 +165,6 @@ void loop() {
       } else if (humidity_color == 'B') {
         humidity_color = 'R';
       }
-//      Serial.print("                 Color is: "); Serial.println(humidity_color);
     }
     was_pressed = false;
   } else {
@@ -215,15 +210,7 @@ void loop() {
     digitalWrite(BLUE, LOW);
   }
 
-
-
-//  Serial.print("humid led: "); Serial.print(humidity_color);
-//  if (hum >= 0) {
-    Serial.print(" | "); Serial.println(hum);
-//  }
-
   if (hum >= 99.5) {
-//    Serial.println("Showing 1 in DIGIT_2");
     show_glyph(GLYPHS[1], DIGIT_2);
   } else {
     show_glyph(OFF, DIGIT_2);
@@ -236,16 +223,7 @@ void loop() {
     int hum2 = (int)hum;
     show_glyph(GLYPHS[int(hum / 10) % 10], DIGIT_3);
     show_glyph(GLYPHS[hum2 % 10], DIGIT_4);
-  }
-
-
-//  if (count % 100 == 0) {
-//    thr++;// = random(0, 10);
-//    fr = random(0, 10);
-//  }
-//  show_glyph(GLYPHS[thr % 10], DIGIT_3);
-//  show_glyph(GLYPHS[fr], DIGIT_4);
- 
+  } 
 
   count++;
 }
